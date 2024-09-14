@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Models/models.dart';
 import 'TuitionCardScreen.dart';
-final tuitionsProvider = StreamProvider.autoDispose.family<List<Tuition>, String>((ref, category) {
+
+final tuitionsProvider =
+    StreamProvider.autoDispose.family<List<Tuition>, String>((ref, category) {
   return FirebaseFirestore.instance
       .collection('Tuitions')
       .where('category', isEqualTo: category)
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) => Tuition.fromFirestore(doc)).toList());
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Tuition.fromFirestore(doc)).toList());
 });
 
 final searchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
@@ -18,7 +21,8 @@ final filterProvider = StateProvider.autoDispose<String>((ref) => 'all');
 
 class ViewAllTuitionScreen extends ConsumerStatefulWidget {
   final Category category;
-  const ViewAllTuitionScreen({Key? key, required this.category}) : super(key: key);
+  const ViewAllTuitionScreen({Key? key, required this.category})
+      : super(key: key);
 
   @override
   _ViewAllTuitionScreenState createState() => _ViewAllTuitionScreenState();
@@ -44,10 +48,12 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
       if (_showAppBar) setState(() => _showAppBar = false);
     }
-    if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
       if (!_showAppBar) setState(() => _showAppBar = true);
     }
   }
@@ -69,9 +75,15 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
                 floating: true,
                 pinned: false,
                 snap: true,
-                title: Text('All ${widget.category.name} Tuitions',style: const TextStyle(color: Colors.white),),
+                title: Text(
+                  'All ${widget.category.name} Tuitions',
+                  style: const TextStyle(color: Colors.white),
+                ),
                 leading: IconButton(
-                  icon: const Icon(CupertinoIcons.back,color: Colors.white,),
+                  icon: const Icon(
+                    CupertinoIcons.back,
+                    color: Colors.white,
+                  ),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 bottom: PreferredSize(
@@ -91,7 +103,8 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
           body: tuitions.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, stack) => Center(child: Text('Error: $err')),
-            data: (tuitionList) => _buildTuitionList(tuitionList, searchQuery, filter),
+            data: (tuitionList) =>
+                _buildTuitionList(tuitionList, searchQuery, filter),
           ),
         ),
       ),
@@ -103,18 +116,19 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextField(
         controller: _searchController,
-        onChanged: (value) => ref.read(searchQueryProvider.notifier).state = value,
+        onChanged: (value) =>
+            ref.read(searchQueryProvider.notifier).state = value,
         decoration: InputDecoration(
           hintText: 'Search tuitions...',
           prefixIcon: const Icon(Icons.search, color: Color(0xFF159895)),
           suffixIcon: ref.watch(searchQueryProvider).isNotEmpty
               ? IconButton(
-            icon: const Icon(Icons.clear, color: Color(0xFF159895)),
-            onPressed: () {
-              _searchController.clear();
-              ref.read(searchQueryProvider.notifier).state = '';
-            },
-          )
+                  icon: const Icon(Icons.clear, color: Color(0xFF159895)),
+                  onPressed: () {
+                    _searchController.clear();
+                    ref.read(searchQueryProvider.notifier).state = '';
+                  },
+                )
               : null,
           filled: true,
           fillColor: Colors.white,
@@ -124,7 +138,8 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
+            borderSide:
+                BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
@@ -137,7 +152,10 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
 
   Widget _buildFilterButton() {
     return PopupMenuButton<String>(
-      icon: const Icon(CupertinoIcons.slider_horizontal_3,color: Colors.white,),
+      icon: const Icon(
+        CupertinoIcons.slider_horizontal_3,
+        color: Colors.white,
+      ),
       onSelected: (String result) {
         ref.read(filterProvider.notifier).state = result;
       },
@@ -154,9 +172,11 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
     );
   }
 
-  Widget _buildTuitionList(List<Tuition> tuitions, String searchQuery, String filter) {
+  Widget _buildTuitionList(
+      List<Tuition> tuitions, String searchQuery, String filter) {
     var filteredTuitions = tuitions
-        .where((tuition) => tuition.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .where((tuition) =>
+            tuition.name.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
 
     if (filter == 'top_rated') {

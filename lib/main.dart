@@ -32,7 +32,7 @@ class EduNetApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.teal,
           elevation: 0,
-          foregroundColor: Colors.white, // This sets the color of the text and icons in the AppBar
+          foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

@@ -1,13 +1,13 @@
 import 'package:edunet/Models/models.dart';
+import 'package:edunet/Screens/Assignments.dart';
 import 'package:edunet/Screens/Help&SupportScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
 import 'CourseDetaiScreen.dart';
 import 'TeachersScreen.dart';
-
+import 'TuitionToppersScreen.dart';
 class TuitionHomeScreen extends StatelessWidget {
   final Tuition tuition;
   const TuitionHomeScreen({super.key, required this.tuition});
@@ -59,7 +59,8 @@ class TuitionHomeScreen extends StatelessWidget {
                   builder: (BuildContext context) {
                     return Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0),
+                      margin: const EdgeInsets.only(
+                          left: 5.0, right: 5.0, top: 5.0),
                       decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(16.0),
@@ -110,7 +111,8 @@ class TuitionHomeScreen extends StatelessWidget {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('Classes').snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('Classes').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Center(child: Text('Something went wrong'));
@@ -179,61 +181,79 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.dashboard, color: Colors.white),
-              title: const Text('Dashboard', style: TextStyle(color: Colors.white)),
+              title: const Text('Dashboard',
+                  style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
-
             ListTile(
               leading: const Icon(Icons.people, color: Colors.white),
-              title: const Text('Teachers', style: TextStyle(color: Colors.white)),
+              title:
+                  const Text('Teachers', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const TeachersScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const TeachersScreen()),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.assignment, color: Colors.white),
-              title: const Text('Assignments', style: TextStyle(color: Colors.white)),
+              title: const Text('Assignments',
+                  style: TextStyle(color: Colors.white)),
               onTap: () {
-                // Navigate to Assignments
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AssignmentScreen()),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.calendar_today, color: Colors.white),
-              title: const Text('Schedule', style: TextStyle(color: Colors.white)),
+              title:
+                  const Text('Schedule', style: TextStyle(color: Colors.white)),
               onTap: () {
                 // Navigate to Schedule
               },
             ),
-
             ListTile(
               leading: const Icon(Icons.analytics, color: Colors.white),
               title: const Text('Stats', style: TextStyle(color: Colors.white)),
               onTap: () {
-                // Navigate to Progress
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TuitionToppersScreen()),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.rate_review, color: Colors.white),
-              title: const Text('Reviews', style: TextStyle(color: Colors.white)),
+              title:
+                  const Text('Reviews', style: TextStyle(color: Colors.white)),
               onTap: () {
-                // Navigate to Courses
+
               },
             ),
             const Divider(color: Colors.white54),
             ListTile(
               leading: const Icon(Icons.help, color: Colors.white),
-              title: const Text('Help & Support', style: TextStyle(color: Colors.white)),
+              title: const Text('Help & Support',
+                  style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  HelpSupportScreen(tuition: tuition,)),
+                  MaterialPageRoute(
+                      builder: (context) => HelpSupportScreen(
+                            tuition: tuition,
+                          )),
                 );
               },
             ),
