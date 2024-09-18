@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edunet/Screens/FavoriteTuitionsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import '../Models/models.dart';
+import '../Models/CategoryModel.dart';
+import '../Models/TuitionModel.dart';
 import 'TuitionCardScreen.dart';
 import 'ViewAllTuitionScreen.dart';
 
@@ -15,16 +17,30 @@ class AllTuitionHomeScreen extends StatelessWidget {
         SliverAppBar(
           backgroundColor: Colors.teal,
           floating: true,
-          title: Text('EduNet', style: GoogleFonts.pacifico(fontSize: 28,color: Colors.white)),
+          title: Text('EduNet',
+              style: GoogleFonts.pacifico(fontSize: 28, color: Colors.white)),
           actions: [
-            IconButton(icon: const Icon(Icons.search,color: Colors.white,), onPressed: () {}),
-            IconButton(icon: const Icon(Icons.bookmark,color: Colors.white), onPressed: () {}),
-            IconButton(icon: const Icon(Icons.person,color: Colors.white), onPressed: () {}),
+            IconButton(
+                icon: const Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+                onPressed: () {}),
+            IconButton(
+                icon: const Icon(Icons.bookmark, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FavoriteTuitionsScreen(
+                            userId: "VYQHotQYEGMdu93r5kjc")),
+                  );
+                }),
           ],
         ),
         StreamBuilder<QuerySnapshot>(
           stream:
-          FirebaseFirestore.instance.collection('Categories').snapshots(),
+              FirebaseFirestore.instance.collection('Categories').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return SliverToBoxAdapter(
@@ -34,19 +50,19 @@ class AllTuitionHomeScreen extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) =>  const ShimmerTuitionList(),
+                  (context, index) => const ShimmerTuitionList(),
                   childCount: 3,
                 ),
               );
             }
 
-            List<Category> categories = snapshot.data!.docs
-                .map((doc) => Category.fromFirestore(doc))
+            List<CategoryModel> categories = snapshot.data!.docs
+                .map((doc) => CategoryModel.fromFirestore(doc))
                 .toList();
 
             return SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (context, index) =>
+                (context, index) =>
                     CategorySection(category: categories[index]),
                 childCount: categories.length,
               ),
@@ -57,6 +73,7 @@ class AllTuitionHomeScreen extends StatelessWidget {
     );
   }
 }
+
 class ResponsiveGrid extends StatelessWidget {
   final List<Widget> children;
   final double childAspectRatio;
@@ -79,7 +96,7 @@ class ResponsiveGrid extends StatelessWidget {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final crossAxisCount =
-        (width / (minCrossAxisExtent + crossAxisSpacing)).floor();
+            (width / (minCrossAxisExtent + crossAxisSpacing)).floor();
         return GridView.count(
           crossAxisCount: crossAxisCount,
           childAspectRatio: childAspectRatio,
@@ -91,7 +108,6 @@ class ResponsiveGrid extends StatelessWidget {
     );
   }
 }
-
 
 class ShimmerTuitionList extends StatelessWidget {
   const ShimmerTuitionList({super.key});
@@ -106,8 +122,7 @@ class ShimmerTuitionList extends StatelessWidget {
         itemCount: 3,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(
-                right: 8, bottom: 8, left: 8),
+            padding: const EdgeInsets.only(right: 8, bottom: 8, left: 8),
             child: Container(
               width: 230,
               height: 350,
@@ -123,9 +138,8 @@ class ShimmerTuitionList extends StatelessWidget {
   }
 }
 
-
 class CategorySection extends StatelessWidget {
-  final Category category;
+  final CategoryModel category;
 
   const CategorySection({Key? key, required this.category}) : super(key: key);
 
@@ -147,7 +161,7 @@ class CategorySection extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.bold,fontSize: 24),
+                      ?.copyWith(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -156,7 +170,7 @@ class CategorySection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -193,11 +207,11 @@ class CategorySection extends StatelessWidget {
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return  const ShimmerTuitionList();
+                  return const ShimmerTuitionList();
                 }
 
-                List<Tuition> tuitions = snapshot.data!.docs
-                    .map((doc) => Tuition.fromFirestore(doc))
+                List<TuitionModel> tuitions = snapshot.data!.docs
+                    .map((doc) => TuitionModel.fromFirestore(doc))
                     .toList();
 
                 return ListView.builder(
@@ -206,11 +220,12 @@ class CategorySection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding:
-                      const EdgeInsets.only(right: 8, bottom: 8, left: 8),
+                          const EdgeInsets.only(right: 8, bottom: 8, left: 8),
                       child: TuitionCard(
                         tuition: tuitions[index],
                         width: 230,
                         height: 350,
+                        userId: 'VYQHotQYEGMdu93r5kjc',
                       ),
                     );
                   },

@@ -1,15 +1,19 @@
-import 'package:edunet/Models/models.dart';
+import 'package:edunet/Models/CategoryModel.dart';
 import 'package:edunet/Screens/Assignments.dart';
 import 'package:edunet/Screens/Help&SupportScreen.dart';
+import 'package:edunet/Screens/TuitionReviewScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../Models/ClassModel.dart';
+import '../Models/TuitionModel.dart';
 import 'CourseDetaiScreen.dart';
 import 'TeachersScreen.dart';
 import 'TuitionToppersScreen.dart';
+
 class TuitionHomeScreen extends StatelessWidget {
-  final Tuition tuition;
+  final TuitionModel tuition;
   const TuitionHomeScreen({super.key, required this.tuition});
 
   @override
@@ -144,7 +148,7 @@ class TuitionHomeScreen extends StatelessWidget {
 }
 
 class CustomDrawer extends StatelessWidget {
-  final Tuition tuition;
+  final TuitionModel tuition;
 
   const CustomDrawer({Key? key, required this.tuition}) : super(key: key);
 
@@ -165,7 +169,7 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: NetworkImage(tuition.imageUrl),
+                    backgroundImage: NetworkImage(tuition.imageUrl!),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -238,7 +242,12 @@ class CustomDrawer extends StatelessWidget {
               title:
                   const Text('Reviews', style: TextStyle(color: Colors.white)),
               onTap: () {
-
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TuitionReviewsScreen()),
+                );
               },
             ),
             const Divider(color: Colors.white54),

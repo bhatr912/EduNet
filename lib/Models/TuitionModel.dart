@@ -1,32 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-class Category {
-  final String id;
-  final String name;
 
-  Category({required this.id, required this.name});
-
-  factory Category.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return Category(
-      id: doc.id,
-      name: data['name'] ?? '',
-    );
-  }
-}
-class Tuition {
+class TuitionModel {
   final String id;
   final String name;
   final String location;
   final double rating;
   final int students;
-  final String imageUrl;
+  final String? imageUrl;
   final String category;
   final List<String> adUrls;
   final String desc;
   final List<String> phones; // New field for phone numbers
   final List<String> emails; // New field for email addresses
 
-  Tuition({
+  TuitionModel({
     required this.id,
     required this.name,
     required this.location,
@@ -40,9 +27,9 @@ class Tuition {
     required this.emails,
   });
 
-  factory Tuition.fromFirestore(DocumentSnapshot doc) {
+  factory TuitionModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
-    return Tuition(
+    return TuitionModel(
       id: doc.id,
       name: data['name'] ?? '',
       location: data['location'] ?? '',
@@ -54,23 +41,6 @@ class Tuition {
       desc: data['desc'] ?? '',
       phones: List<String>.from(data['phones'] ?? []), // Convert to List<String>
       emails: List<String>.from(data['emails'] ?? []), // Convert to List<String>
-    );
-  }
-}
-
-class ClassModel {
-  final String id;
-  final String name;
-  final List<String> courses;
-
-  ClassModel({required this.id, required this.name, required this.courses});
-
-  factory ClassModel.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return ClassModel(
-      id: doc.id,
-      name: data['name'] ?? '',
-      courses: List<String>.from(data['subjects'] ?? []),
     );
   }
 }

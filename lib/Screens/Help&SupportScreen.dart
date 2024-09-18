@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../Models/models.dart';
+import '../Models/CategoryModel.dart';
+import '../Models/TuitionModel.dart';
 
 class HelpSupportScreen extends StatelessWidget {
-  final Tuition tuition;
+  final TuitionModel tuition;
 
   const HelpSupportScreen({Key? key, required this.tuition}) : super(key: key);
 
@@ -31,7 +32,7 @@ class HelpSupportScreen extends StatelessWidget {
             return const Center(child: Text('Unable to load tuition information'));
           }
 
-          final updatedTuition = Tuition.fromFirestore(snapshot.data!);
+          final updatedTuition = TuitionModel.fromFirestore(snapshot.data!);
 
           return SingleChildScrollView(
             child: Padding(
@@ -49,7 +50,7 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactList(Tuition tuition) {
+  Widget _buildContactList(TuitionModel tuition) {
     return Column(
       children: [
         ...tuition.phones.map((phone) => _buildContactTile(

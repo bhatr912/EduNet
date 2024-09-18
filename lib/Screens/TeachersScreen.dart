@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Models/TeacherModel.dart';
+
 class TeachersScreen extends StatelessWidget {
   const TeachersScreen({Key? key}) : super(key: key);
 
@@ -23,7 +25,7 @@ class TeachersScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final teachers = snapshot.data!.docs.map((doc) => Teacher.fromFirestore(doc)).toList();
+          final teachers = snapshot.data!.docs.map((doc) => TeacherModel.fromFirestore(doc)).toList();
 
           return ListView.builder(
             itemCount: teachers.length,
@@ -37,38 +39,9 @@ class TeachersScreen extends StatelessWidget {
   }
 }
 
-class Teacher {
-  final String id;
-  final String name;
-  final String? imageUrl;
-  final String subject;
-  final String qualification;
-  final String bio;
-
-  Teacher({
-    required this.id,
-    required this.name,
-    required this.imageUrl,
-    required this.subject,
-    required this.qualification,
-    required this.bio,
-  });
-
-  factory Teacher.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return Teacher(
-      id: doc.id,
-      name: data['name'] ?? '',
-      imageUrl: data['imageUrl'],
-      subject: data['subject'] ?? '',
-      qualification: data['qualification'] ?? '',
-      bio: data['bio'] ?? '',
-    );
-  }
-}
 
 class TeacherCard extends StatelessWidget {
-  final Teacher teacher;
+  final TeacherModel teacher;
 
   const TeacherCard({Key? key, required this.teacher}) : super(key: key);
 

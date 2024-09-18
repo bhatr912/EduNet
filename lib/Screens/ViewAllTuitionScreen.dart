@@ -1,26 +1,26 @@
+import 'package:edunet/Models/TuitionModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Models/models.dart';
+import '../Models/CategoryModel.dart';
 import 'TuitionCardScreen.dart';
 
 final tuitionsProvider =
-    StreamProvider.autoDispose.family<List<Tuition>, String>((ref, category) {
+    StreamProvider.autoDispose.family<List<TuitionModel>, String>((ref, category) {
   return FirebaseFirestore.instance
       .collection('Tuitions')
       .where('category', isEqualTo: category)
       .snapshots()
       .map((snapshot) =>
-          snapshot.docs.map((doc) => Tuition.fromFirestore(doc)).toList());
+          snapshot.docs.map((doc) => TuitionModel.fromFirestore(doc)).toList());
 });
-
 final searchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
 final filterProvider = StateProvider.autoDispose<String>((ref) => 'all');
 
 class ViewAllTuitionScreen extends ConsumerStatefulWidget {
-  final Category category;
+  final CategoryModel category;
   const ViewAllTuitionScreen({Key? key, required this.category})
       : super(key: key);
 
@@ -173,7 +173,7 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
   }
 
   Widget _buildTuitionList(
-      List<Tuition> tuitions, String searchQuery, String filter) {
+      List<TuitionModel> tuitions, String searchQuery, String filter) {
     var filteredTuitions = tuitions
         .where((tuition) =>
             tuition.name.toLowerCase().contains(searchQuery.toLowerCase()))
@@ -203,6 +203,7 @@ class _ViewAllTuitionScreenState extends ConsumerState<ViewAllTuitionScreen> {
             tuition: filteredTuitions[index],
             width: double.infinity,
             height: 350,
+            userId: 'VYQHotQYEGMdu93r5kjc',
           ),
         );
       },

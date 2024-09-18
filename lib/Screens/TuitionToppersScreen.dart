@@ -1,35 +1,7 @@
+import 'package:edunet/Models/TopperModel.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Topper {
-  final String name;
-  final String? imageUrl;
-  final int score;
-  final int total;
-  final int year;
-  final String exam;
-
-  Topper({
-    required this.name,
-    this.imageUrl,
-    required this.score,
-    required this.total,
-    required this.year,
-    required this.exam,
-  });
-
-  factory Topper.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Topper(
-      name: data['name'] ?? '',
-      imageUrl: data['imageUrl'],
-      score: data['score'] ?? 0,
-      total: data['total'] ?? 100,
-      year: data['year'] ?? 0,
-      exam: data['exam'] ?? '',
-    );
-  }
-}
 
 class TuitionToppersScreen extends StatefulWidget {
   const TuitionToppersScreen({Key? key}) : super(key: key);
@@ -163,8 +135,8 @@ class _TuitionToppersScreenState extends State<TuitionToppersScreen> {
           return const Center(child: Text('No toppers found'));
         }
 
-        List<Topper> toppers = snapshot.data!.docs
-            .map((doc) => Topper.fromFirestore(doc))
+        List<TopperModel> toppers = snapshot.data!.docs
+            .map((doc) => TopperModel.fromFirestore(doc))
             .toList();
         // Sort toppers by score in descending order
         toppers.sort((a, b) => b.score.compareTo(a.score));
@@ -198,7 +170,7 @@ class _TuitionToppersScreenState extends State<TuitionToppersScreen> {
     return query.snapshots();
   }
 
-  Widget _buildTopperCard(Topper topper) {
+  Widget _buildTopperCard(TopperModel topper) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
